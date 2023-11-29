@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-
-</head>
-<body>
-
-<div class="forms">
-    <div class="form-container">
-        <form action="/post/createUser" method="POST">
-            <input type="text" name="name" placeholder="Name" id="">
-            <input type="text" name="email" placeholder="Email" id="">
-            <input type="text" name="password" placeholder="Password" id="">
-            <input type="submit" value="Submit">
-        </form>
-    </div>
-</div>
-
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Lag en bruker</title>
+  </head>
+  <body>
+    <form action="/lagBruker" method="POST">
+      <input type="text" name="name" placeholder="name" id="" />
+      <input type="email" name="email" placeholder="email" id="" />
+      <input type="password" name="password" placeholder="password" id="" />
+      <input type="submit" value="Submit" />
+    </form>
+  </body>
 </html>
