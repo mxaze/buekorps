@@ -1,12 +1,192 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit users</title>
     <link rel="stylesheet" href="../../../style.css">
-    <title>Edit page</title>
 </head>
-<body>
-    
+
+<script>
+    fetch("/json/users")
+        .then(res => res.json())
+        .then(data => {
+            const admins = data.filter(user => user.role === "admin");
+            const ledere = data.filter(user => user.role === "leder");
+            const medlemmer = data.filter(user => user.role === "medlem");
+
+            admins.sort((a, b) => a.id - b.id);
+            ledere.sort((a, b) => a.id - b.id);
+            medlemmer.sort((a, b) => a.id - b.id);
+
+            admins.forEach(user => {
+                const tr = document.createElement("tr");
+                const id = document.createElement("td");
+                const name = document.createElement("td");
+                const email = document.createElement("td");
+                const role = document.createElement("td");
+                const actions = document.createElement("td");
+                const editUserA = document.createElement("a");
+                const editUser = document.createElement("button");
+                const deleteForm = document.createElement("form");
+                const deleteUser = document.createElement("button");
+                id.setAttribute("class", "id");
+                id.innerText = user.id;
+                name.innerText = user.name;
+                email.innerText = user.email;
+                role.innerText = user.role;
+                editUserA.href = `/user/admin/edit/${user.id}`;
+                editUser.innerText = "✏️";
+                editUser.setAttribute("class", "btn btn-warning");
+                editUser.style.marginRight = "2.5%";
+                deleteForm.setAttribute("class", "form-class");
+                deleteForm.setAttribute("action", `/post/slettBruker/${user.id}`);
+                deleteForm.setAttribute("method", "POST");
+                deleteUser.innerText = "🗑️";
+                deleteUser.setAttribute("class", "btn btn-danger");
+                tr.appendChild(id);
+                tr.appendChild(name);
+                tr.appendChild(email);
+                tr.appendChild(role);
+                editUserA.appendChild(editUser);
+                actions.appendChild(editUserA);
+                deleteForm.appendChild(deleteUser);
+                actions.appendChild(deleteForm);
+                tr.appendChild(actions);
+                document.getElementById("administratorBody").appendChild(tr);
+            })
+
+            ledere.forEach(user => {
+                const tr = document.createElement("tr");
+                const id = document.createElement("td");
+                const name = document.createElement("td");
+                const email = document.createElement("td");
+                const role = document.createElement("td");
+                const actions = document.createElement("td");
+                const editUserA = document.createElement("a");
+                const editUser = document.createElement("button");
+                const deleteForm = document.createElement("form");
+                const deleteUser = document.createElement("button");
+                id.setAttribute("class", "id");
+                id.innerText = user.id;
+                name.innerText = user.name;
+                email.innerText = user.email;
+                role.innerText = user.role;
+                editUserA.href = `/user/admin/edit/${user.id}`;
+                editUser.innerText = "✏️";
+                editUser.setAttribute("class", "btn btn-warning");
+                editUser.style.marginRight = "2.5%";
+                deleteForm.setAttribute("class", "form-class");
+                deleteForm.setAttribute("action", `/post/slettBruker/${user.id}`);
+                deleteForm.setAttribute("method", "POST");
+                deleteUser.innerText = "🗑️";
+                deleteUser.setAttribute("class", "btn btn-danger");
+                tr.appendChild(id);
+                tr.appendChild(name);
+                tr.appendChild(email);
+                tr.appendChild(role);
+                editUserA.appendChild(editUser);
+                actions.appendChild(editUserA);
+                deleteForm.appendChild(deleteUser);
+                actions.appendChild(deleteForm);
+                tr.appendChild(actions);
+                document.getElementById("lederBody").appendChild(tr);
+            })
+
+            medlemmer.forEach(user => {
+                const tr = document.createElement("tr");
+                const id = document.createElement("td");
+                const name = document.createElement("td");
+                const email = document.createElement("td");
+                const role = document.createElement("td");
+                const actions = document.createElement("td");
+                const editUserA = document.createElement("a");
+                const editUser = document.createElement("button");
+                const deleteForm = document.createElement("form");
+                const deleteUser = document.createElement("button");
+                id.setAttribute("class", "id");
+                id.innerText = user.id;
+                name.innerText = user.name;
+                email.innerText = user.email;
+                role.innerText = user.role;
+                editUserA.href = `/user/admin/edit/${user.id}`;
+                editUser.innerText = "✏️";
+                editUser.setAttribute("class", "btn btn-warning");
+                editUser.style.marginRight = "2.5%";
+                deleteForm.setAttribute("class", "form-class");
+                deleteForm.setAttribute("action", `/post/slettBruker/${user.id}`);
+                deleteForm.setAttribute("method", "POST");
+                deleteUser.innerText = "🗑️";
+                deleteUser.setAttribute("class", "btn btn-danger");
+                tr.appendChild(id);
+                tr.appendChild(name);
+                tr.appendChild(email);
+                tr.appendChild(role);
+                editUserA.appendChild(editUser);
+                actions.appendChild(editUserA);
+                deleteForm.appendChild(deleteUser);
+                actions.appendChild(deleteForm);
+                tr.appendChild(actions);
+                document.getElementById("medlemBody").appendChild(tr);
+            })
+        })
+        .catch(error => console.error('Error:', error));
+</script>
+
+<body id="editBody">
+    <h3>
+        Administratorer
+    </h3>
+    <table id="tableAdministratorer">
+        <thead id="thead">
+            <tr>
+                <th>#</th>
+                <th>Navn</th>
+                <th>E-post</th>
+                <th>role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="administratorBody">
+
+        </tbody>
+    </table>
+
+    <h3>
+        Ledere
+    </h3>
+    <table id="tableLedere">
+        <thead id="thead">
+            <tr>
+                <th>#</th>
+                <th>Navn</th>
+                <th>E-post</th>
+                <th>role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="lederBody">
+
+        </tbody>
+    </table>
+    <h3>
+        Medlemmer
+    </h3>
+    <table id="tableMedlemmer">
+        <thead id="thead">
+            <tr>
+                <th>#</th>
+                <th>Navn</th>
+                <th>E-post</th>
+                <th>role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="medlemBody">
+
+        </tbody>
+    </table>
 </body>
+
 </html>

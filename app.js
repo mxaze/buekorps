@@ -22,6 +22,18 @@ const insertStmt = db.prepare(
   "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)"
 );
 
+app.get("/json/users", (req, res) => {
+  const users = db.prepare("SELECT * FROM users").all();
+  res.send(users);
+});
+
+app.post("/post/slettBruker/:id", (req, res) => {
+  const id = req.params.id;
+  const deleteStatement = db.prepare("DELETE FROM users WHERE id = ?");
+  deleteStatement.run(id);
+  res.redirect("/user/admin/edit");
+});
+
 app.post("/lagBruker", (req, res) => {
   const { name, email, password, role } = req.body;
   const user = db.prepare("SELECT * FROM users WHERE email = ?").get(email);
@@ -51,7 +63,7 @@ app.post("/adminCreate", (req, res) => {
   } else {
     const hash = bcrypt.hashSync(password, 6);
     insertStmt.run(name, email, hash, role);
-    res.send("User created");
+    res.redirect(`/user/admin/create`);
   }
 });
 

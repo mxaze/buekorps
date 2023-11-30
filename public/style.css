@@ -75,9 +75,9 @@ main {
     font-weight: 500;
     background-color: transparent;
     text-align: center;
-    appearance: none; /* Add this line */
-    -webkit-appearance: none; /* Add this line for Chrome and Safari */
-    -moz-appearance: none; /* Add this line for Firefox */
+    appearance: none;
+    -webkit-appearance: none; 
+    -moz-appearance: none; 
 }
 
 .input-box select::placeholder{
@@ -114,3 +114,31 @@ main {
     cursor: pointer;
 }
 
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th,
+table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #000;
+}
+
+table th {
+    font-weight: bold;
+}
+
+table tr:hover {
+    background-color: #eeecec;
+}
+
+#editBody {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    gap: 4rem;
+}
