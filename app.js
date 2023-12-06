@@ -1,9 +1,10 @@
 const express = require("express");
-const db = require("better-sqlite3")("database.db", { verbose: console.log });
+const db = require("better-sqlite3")("database.db");
 const bcrypt = require("bcrypt");
 const session = require("express-session");
 const path = require("path");
 const bodyParser = require("body-parser");
+const crypto = require("crypto");
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
@@ -19,12 +20,28 @@ app.use(
 );
 
 const insertStmt = db.prepare(
-  "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)"
+  "INSERT INTO users (name, role, email, password, token) VALUES (?, ?, ?, ?, ?)"
 );
+
+const hashPassword = (password) => {
+  const saltRounds = 6;
+  return bcrypt.hashSync(password, saltRounds);
+};
+
+const token = crypto.randomUUID();
+
+function createExampleData() {
+  insertStmt.run("Admin", "admin", "admin@test.com", hashPassword("Passord01"), token);
+  console.log("Created exampledata successfully");
+}
 
 app.get("/json/users", (req, res) => {
   const users = db.prepare("SELECT * FROM users").all();
   res.send(users);
+});
+
+app.get("/user/admin/edit/:id", (req, res) => {
+  res.sendFile(__dirname + "/public/user/admin/edit/id.html");
 });
 
 app.post("/post/slettBruker/:id", (req, res) => {
@@ -35,7 +52,7 @@ app.post("/post/slettBruker/:id", (req, res) => {
 });
 
 app.post("/lagBruker", (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password } = req.body;
   const user = db.prepare("SELECT * FROM users WHERE email = ?").get(email);
 
   if (user) {
@@ -44,9 +61,9 @@ app.post("/lagBruker", (req, res) => {
       res.redirect("/register");
     }, 2000);
   } else {
-    const hash = bcrypt.hashSync(password, 6);
-    const user = insertStmt.run(name, email, hash, "medlem");
-    const medlem = user.role;
+    const passwordHash = bcrypt.hashSync(password, 6);
+    const token = crypto.randomUUID();
+    const user = insertStmt.run(name, "medlem", email, passwordHash, token);
     res.redirect(`/user/medlem/`);
   }
 });
@@ -61,8 +78,9 @@ app.post("/adminCreate", (req, res) => {
       res.redirect("/user/admin/create");
     }, 1000);
   } else {
-    const hash = bcrypt.hashSync(password, 6);
-    insertStmt.run(name, email, hash, role);
+    const passwordHash = bcrypt.hashSync(password, 6);
+    const token = crypto.randomUUID();
+    insertStmt.run(name, role, email, passwordHash, token);
     res.redirect(`/user/admin/create`);
   }
 });

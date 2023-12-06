@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../../style.css">
+    <title>Edit user</title>
+</head>
+<body>
+    <!-- Edit user does not exist yet, but rn it fetches data and will work when you make it in app.js -->
+    <form action="/editUser" method="POST">
+        <input type="text" name="id" id="id" readonly>
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email">
+        <label for="role">Role</label>
+        <select name="role" id="role">
+            <option value="">-- Velg rolle --</option>
+            <option value="admin">Admin</option>
+            <option value="leder">Leder</option>
+            <option value="medlem">Medlem</option>
+        </select>
+        <input type="submit" value="Edit user">
+    </form>
+    <script>
+        const userId = window.location.pathname.split("/").pop();
+        fetch("/json/users")
+            .then((res) => res.json())
+            .then((data) => {
+                const user = data.find((user) => user.id == userId);
+                document.getElementById("id").value = user.id;
+                document.getElementById("name").value = user.name;
+                document.getElementById("email").value = user.email;
+                document.getElementById("role").value = user.role;
+            });
+    </script>
+</body>
+</html>
