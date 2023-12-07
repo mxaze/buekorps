@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "cls && node app.js --watch"
+    "start": "cls && nodemon app.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

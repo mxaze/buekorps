@@ -23,12 +23,18 @@ const insertStmt = db.prepare(
   "INSERT INTO users (name, role, email, password, token) VALUES (?, ?, ?, ?, ?)"
 );
 
+const updateStmt = db.prepare(
+  "UPDATE users SET name = ?, role = ?, email = ? WHERE id = ?"
+);
+
 const hashPassword = (password) => {
   const saltRounds = 6;
   return bcrypt.hashSync(password, saltRounds);
 };
 
 const token = crypto.randomUUID();
+
+const findByToken = db.prepare("SELECT * FROM users WHERE token = ?");
 
 function createExampleData() {
   insertStmt.run("Admin", "admin", "admin@test.com", hashPassword("Passord01"), token);
@@ -42,6 +48,14 @@ app.get("/json/users", (req, res) => {
 
 app.get("/user/admin/edit/:id", (req, res) => {
   res.sendFile(__dirname + "/public/user/admin/edit/id.html");
+});
+
+app.get("/user/admin/create", (req, res) => {
+  res.sendFile(__dirname + "/public/user/admin/create.html");
+});
+
+app.get("/user/medlem/kontaktinfo", (req, res) => {
+  res.sendFile(__dirname + "/public/user/medlem/kontaktinfo.html");
 });
 
 app.post("/post/slettBruker/:id", (req, res) => {
@@ -83,6 +97,31 @@ app.post("/adminCreate", (req, res) => {
     insertStmt.run(name, role, email, passwordHash, token);
     res.redirect(`/user/admin/create`);
   }
+});
+
+app.post("/editUser", (req, res) => {
+  const id = req.body.id;
+  const { name, email, role} = req.body;
+  const user = db.prepare("SELECT * FROM users WHERE id = ?").get(id);
+
+  if (name != user.name) {
+    const updateStmt = db.prepare("UPDATE users SET name = ? WHERE id = ?");
+    updateStmt.run(name, id);
+  }
+
+  if (email != user.email) {
+    const updateStmt = db.prepare("UPDATE users SET email = ? WHERE id = ?");
+    updateStmt.run(email, id);
+  }
+
+  if (role != user.role) {
+    if (role != "velg") {
+      const updateStmt = db.prepare("UPDATE users SET role = ? WHERE id = ?");
+      updateStmt.run(role, id);
+    }
+  }
+
+  res.redirect("/user/admin/edit");
 });
 
 // login works
