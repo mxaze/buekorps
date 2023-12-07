@@ -12,12 +12,13 @@ body{
     justify-content: center ;
     align-items: center;
     min-height: 100vh;
+    background-color:  #171718 ;
 }
 
 main a {
     transition: 0.2s ease-in-out;
     text-decoration: none;
-    color: #000;
+    color: #ffffff;
     font-size: 30px;
     font-weight: 500;
 }
@@ -117,6 +118,7 @@ main {
 table {
     width: 100%;
     border-collapse: collapse;
+    box-shadow: 0 0 20px rgba(90, 90, 90, 0.2);
 }
 
 table th,
@@ -124,14 +126,17 @@ table td {
     padding: 8px;
     text-align: left;
     border-bottom: 1px solid #000;
+    color: #fff;
 }
 
 table th {
     font-weight: bold;
+    color: #eeecec;
 }
 
 table tr:hover {
-    background-color: #eeecec;
+    background-color:#505457
+    ;
 }
 
 #editBody {
@@ -142,3 +147,35 @@ table tr:hover {
     min-height: 100vh;
     gap: 4rem;
 }
+
+h1 {
+    text-align: center;
+    font-size: 30px;
+    color: #fff;
+  }
+  
+  h2 {
+    color: #fff;
+    margin: 1rem 0;
+  }
+  
+  h3 {
+    color: #fff;
+    text-align: center;
+    margin: 1rem;
+  }
+  
+  p {
+    color: #fff;
+  }
+  
+  a {
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .useredit{
+    width: 400px;
+    color: #000;
+    
+  }
