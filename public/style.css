@@ -37,13 +37,14 @@ main {
 
 .wrapper{
     width: 400px;
-    background: #fff;
     color: #000;
+
 }
 
 .wrapper .h1{
     font-size: 35px;
     text-align: center;
+    color: #fff;
 }  
 
 .wrapper .input-box{
@@ -60,6 +61,7 @@ main {
     font-weight: 500;
     background-color: transparent;
     text-align: center;
+    background-color: #fff;
 }
 
 .input-box input::placeholder{
@@ -79,6 +81,7 @@ main {
     appearance: none;
     -webkit-appearance: none; 
     -moz-appearance: none; 
+    background-color: #fff;
 }
 
 .input-box select::placeholder{
@@ -178,4 +181,9 @@ h1 {
     width: 200px;
     color: #000;
     
+  }
+
+  .admin-create h1{
+    margin-right: 10px;
+
   }
