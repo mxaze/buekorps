@@ -36,13 +36,14 @@
                 name.innerText = user.name;
                 email.innerText = user.email;
                 role.innerText = user.role;
-                editUserA.href = `/user/admin/edit/${user.id}`;
+                editUserA.href = `/u/admin/edit/${user.id}`;
                 editUser.innerText = "✏️";
                 editUser.setAttribute("class", "btn btn-warning");
                 editUser.style.marginRight = "2.5%";
                 deleteForm.setAttribute("class", "form-class");
                 deleteForm.setAttribute("action", `/post/slettBruker/${user.id}`);
                 deleteForm.setAttribute("method", "POST");
+                deleteForm.style.display="block;"
                 deleteUser.innerText = "🗑️";
                 deleteUser.setAttribute("class", "btn btn-danger");
                 tr.appendChild(id);
@@ -73,13 +74,14 @@
                 name.innerText = user.name;
                 email.innerText = user.email;
                 role.innerText = user.role;
-                editUserA.href = `/user/admin/edit/${user.id}`;
+                editUserA.href = `/u/admin/edit/${user.id}`;
                 editUser.innerText = "✏️";
                 editUser.setAttribute("class", "btn btn-warning");
                 editUser.style.marginRight = "2.5%";
                 deleteForm.setAttribute("class", "form-class");
                 deleteForm.setAttribute("action", `/post/slettBruker/${user.id}`);
                 deleteForm.setAttribute("method", "POST");
+                deleteForm.style.display="block;"
                 deleteUser.innerText = "🗑️";
                 deleteUser.setAttribute("class", "btn btn-danger");
                 tr.appendChild(id);
@@ -110,13 +112,14 @@
                 name.innerText = user.name;
                 email.innerText = user.email;
                 role.innerText = user.role;
-                editUserA.href = `/user/admin/edit/${user.id}`;
+                editUserA.href = `/u/admin/edit/${user.id}`;
                 editUser.innerText = "✏️";
                 editUser.setAttribute("class", "btn btn-warning");
                 editUser.style.marginRight = "2.5%";
                 deleteForm.setAttribute("class", "form-class");
                 deleteForm.setAttribute("action", `/post/slettBruker/${user.id}`);
                 deleteForm.setAttribute("method", "POST");
+                deleteForm.style.display="block;"
                 deleteUser.innerText = "🗑️";
                 deleteUser.setAttribute("class", "btn btn-danger");
                 tr.appendChild(id);
@@ -152,7 +155,6 @@
 
         </tbody>
     </table>
-
     <h3>
         Ledere
     </h3>

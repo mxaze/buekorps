@@ -6,29 +6,28 @@
     <link rel="stylesheet" href="../../../style.css" />
     <title>Lag en bruker</title>
   </head>
-  
+
   <body>
-    <div class="wrapper">
+    <aside>
+      <h1>Registrer</h1>
       <form action="/adminCreate" method="POST">
-        <h1>Registrer</h1>
-        <div class="input-box">
-          <input type="text" name="name" placeholder="Name" required />
-          <input type="email" name="email" placeholder="Email" required />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            required
-          />
-          <select name="role" id="role">
-            <option value="">-- VELG ROLLE --</option>
-            <option value="admin">admin</option>
-            <option value="leder">leder</option>
-            <option value="medlem">medlem</option>
-          </select>
-          <input type="submit" value="Submit" />
-        </div>
+        <input type="text" name="name" placeholder="Name" required/>
+        <input type="email" name="email" placeholder="Email" required/>
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value=""
+          required
+        />
+        <select name="role" id="role">
+          <option value="">-- VELG ROLLE --</option>
+          <option value="admin">admin</option>
+          <option value="leder">leder</option>
+          <option value="medlem">medlem</option>
+        </select>
+        <input type="submit" value="Submit" />
       </form>
-    </div>
+    </aside>
   </body>
 </html>

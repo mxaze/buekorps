@@ -19,6 +19,8 @@ app.use(
   })
 );
 
+
+
 const insertStmt = db.prepare(
   "INSERT INTO users (name, role, email, password, token) VALUES (?, ?, ?, ?, ?)"
 );
@@ -27,14 +29,15 @@ const updateStmt = db.prepare(
   "UPDATE users SET name = ?, role = ?, email = ? WHERE id = ?"
 );
 
+const deleteStmt = db.prepare("DELETE FROM users WHERE id = ?");
+
+const findByToken = db.prepare("SELECT * FROM users WHERE token = ?");
+
 const hashPassword = (password) => {
   const saltRounds = 6;
   return bcrypt.hashSync(password, saltRounds);
 };
-
 const token = crypto.randomUUID();
-
-const findByToken = db.prepare("SELECT * FROM users WHERE token = ?");
 
 function createExampleData() {
   insertStmt.run("Admin", "admin", "admin@test.com", hashPassword("Passord01"), token);
@@ -45,24 +48,37 @@ app.get("/json/users", (req, res) => {
   const users = db.prepare("SELECT * FROM users").all();
   res.send(users);
 });
-
-app.get("/user/admin/edit/:id", (req, res) => {
+app.get("/u/admin/edit", (req, res) => {
+  res.sendFile(__dirname + "/public/user/admin/edit/index.html");
+});
+app.get("/u/admin/edit/:id", (req, res) => {
   res.sendFile(__dirname + "/public/user/admin/edit/id.html");
 });
 
-app.get("/user/admin/create", (req, res) => {
+app.get("/u/admin/create", (req, res) => {
   res.sendFile(__dirname + "/public/user/admin/create.html");
 });
 
-app.get("/user/medlem/kontaktinfo", (req, res) => {
+app.get("/u/admin/", (req, res) => {
+  res.sendFile(__dirname + "/public/user/admin/index.html");
+});
+
+app.get("/u/medlem/", (req, res) => {
+  res.sendFile(__dirname + "/public/user/medlem/index.html");
+});
+
+app.get("/u/medlem/kontaktinfo", (req, res) => {
   res.sendFile(__dirname + "/public/user/medlem/kontaktinfo.html");
+});
+
+app.get("/u/leder/", (req, res) => {
+  res.sendFile(__dirname + "/public/user/leder/index.html");
 });
 
 app.post("/post/slettBruker/:id", (req, res) => {
   const id = req.params.id;
-  const deleteStatement = db.prepare("DELETE FROM users WHERE id = ?");
-  deleteStatement.run(id);
-  res.redirect("/user/admin/edit");
+  deleteStmt.run(id);
+  res.redirect("/u/admin/edit");
 });
 
 app.post("/lagBruker", (req, res) => {
@@ -78,7 +94,7 @@ app.post("/lagBruker", (req, res) => {
     const passwordHash = bcrypt.hashSync(password, 6);
     const token = crypto.randomUUID();
     const user = insertStmt.run(name, "medlem", email, passwordHash, token);
-    res.redirect(`/user/medlem/`);
+    res.redirect(`/u/medlem/`);
   }
 });
 
@@ -89,13 +105,13 @@ app.post("/adminCreate", (req, res) => {
   if (user) {
     res.send("User already exists");
     setTimeout(() => {
-      res.redirect("/user/admin/create");
+      res.redirect("/u/admin/create");
     }, 1000);
   } else {
     const passwordHash = bcrypt.hashSync(password, 6);
     const token = crypto.randomUUID();
     insertStmt.run(name, role, email, passwordHash, token);
-    res.redirect(`/user/admin/create`);
+    res.redirect(`/u/admin/edit`);
   }
 });
 
@@ -121,7 +137,7 @@ app.post("/editUser", (req, res) => {
     }
   }
 
-  res.redirect("/user/admin/edit");
+  res.redirect("/u/admin/edit");
 });
 
 // login works
@@ -138,7 +154,7 @@ app.post("/login", (req, res) => {
 
   if (compare) {
     req.session.user = user;
-    res.redirect(`/user/${user.role}`);
+    res.redirect(`/u/${user.role}`);
   } else {
     res.status(401).send("Wrong email or password");
   }
