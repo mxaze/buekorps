@@ -19,8 +19,6 @@ app.use(
   })
 );
 
-
-
 const insertStmt = db.prepare(
   "INSERT INTO users (name, role, email, password, token) VALUES (?, ?, ?, ?, ?)"
 );
@@ -37,6 +35,7 @@ const hashPassword = (password) => {
   const saltRounds = 6;
   return bcrypt.hashSync(password, saltRounds);
 };
+
 const token = crypto.randomUUID();
 
 function createExampleData() {
@@ -91,9 +90,9 @@ app.post("/lagBruker", (req, res) => {
       res.redirect("/register");
     }, 2000);
   } else {
-    const passwordHash = bcrypt.hashSync(password, 6);
+    const hashed = hashPassword(password);
     const token = crypto.randomUUID();
-    const user = insertStmt.run(name, "medlem", email, passwordHash, token);
+    insertStmt.run(name, "medlem", email, hashed, token);
     res.redirect(`/u/medlem/`);
   }
 });
@@ -108,9 +107,9 @@ app.post("/adminCreate", (req, res) => {
       res.redirect("/u/admin/create");
     }, 1000);
   } else {
-    const passwordHash = bcrypt.hashSync(password, 6);
+    const hashed = hashPassword(password);
     const token = crypto.randomUUID();
-    insertStmt.run(name, role, email, passwordHash, token);
+    insertStmt.run(name, role, email, hashed, token);
     res.redirect(`/u/admin/edit`);
   }
 });
