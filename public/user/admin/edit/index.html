@@ -14,7 +14,7 @@
         .then(data => {
             const admins = data.filter(user => user.role === "admin");
             const ledere = data.filter(user => user.role === "leder");
-            const medlemmer = data.filter(user => user.role === "medlem");
+            const medlemmer = data.filter(user => user.role === "medlem" || user.role === "forelder");
 
             admins.sort((a, b) => a.id - b.id);
             ledere.sort((a, b) => a.id - b.id);

@@ -2,6 +2,24 @@ CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     role TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    adress TEXT NOT NULL,
+    birthdate TEXT NOT NULL,
+    peletong_id NUMBER NOT NULL,
+    forelder_id NUMBER NOT NULL,
+    email TEXT NOT NULL,
+    password TEXT NOT NULL,
+    token TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS peletong (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS forelder (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
     email TEXT NOT NULL,
     password TEXT NOT NULL,
     token TEXT NOT NULL

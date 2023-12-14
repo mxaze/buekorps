@@ -7,26 +7,89 @@
     <title>Edit user</title>
   </head>
   <body>
-    <div class="useredit">
-      <h1>EDIT USER</h1>
-      <form action="/editUser" method="POST">
-        <label for="name">ID</label>
-        <input type="text" name="id" id="id" readonly />
-        <label for="name">Name</label>
-        <input type="text" name="name" id="name" />
-        <label for="email">Email</label>
-        <input type="email" name="email" id="email"/>
-        <label for="role">Role</label>
-        <select name="role" id="role">
-          <option value="">-- Velg rolle --</option>
-          <option value="admin">Admin</option>
-          <option value="leder">Leder</option>
-          <option value="medlem">Medlem</option>
-        </select>
-        <input type="submit" value="Submit" />
-      </form>
-    </div>
+    <style>
+      form {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      aside {
+        display: flex;
+        gap: 1rem;
+        flex-direction: row;;
+      }
+
+      div {
+        display: flex;
+        gap: 1rem;
+        flex-direction: column;
+      }
+    </style>
+    <form action="/editUser" method="POST" id="editForm">
+      <aside>
+        <div>
+          <h1>Generelt</h1>
+          <label>ID</label>
+          <input type="number" name="id" id="id" placeholder="ID" readonly />
+
+          <label>Fult navn</label>
+          <input type="text" name="name" id="name" placeholder="Fullt navn" />
+
+          <label>Email</label>
+          <input type="email" name="email" id="email" placeholder="Email" />
+
+          <label>Velg rolle</label>
+          <select name="role" id="role">
+            <option selected value="velg">Velg en rolle...</option>
+            <option value="admin">Admin</option>
+            <option value="leder">Leder</option>
+            <option value="forelder">Forelder</option>
+            <option value="medlem">Medlem</option>
+          </select>
+
+          <label>Peletong id</label>
+          <input
+            type="number"
+            name="peletong_id"
+            id="peletong_id"
+            placeholder="Peletong id"
+          />
+        </div>
+        <div>
+          <h1>Kontaktinfo</h1>
+
+          <label>Telefon</label>
+          <input type="tel" name="phone" id="phone" placeholder="Telefon" />
+
+          <label>Adresse</label>
+          <input
+            type="text"
+            name="adress"
+            id="adress"
+            placeholder="Adresse"
+          />
+
+          <label>Fødselsdato</label>
+          <input
+            type="date"
+            name="birthdate"
+            id="birthdate"
+            placeholder="Fødselsdato"
+          />
+          <label>Forelder id</label>
+          <input
+            type="number"
+            name="forelder_id"
+            id="forelder_id"
+            placeholder="Forelder id"
+          />
+        </div>
+      </aside>
+      <input type="submit" />
+    </form>
     <script>
+      // gets id from html and puts it in the form
       const userId = window.location.pathname.split("/").pop();
       fetch("/json/users")
         .then((res) => res.json())
@@ -36,6 +99,11 @@
           document.getElementById("name").value = user.name;
           document.getElementById("email").value = user.email;
           document.getElementById("role").value = user.role;
+          document.getElementById("phone").value = user.phone;
+          document.getElementById("adress").value = user.adress;
+          document.getElementById("birthdate").value = user.birthdate;
+          document.getElementById("peletong_id").value = user.peletong_id;
+          document.getElementById("forelder_id").value = user.forelder_id;
         });
     </script>
   </body>
