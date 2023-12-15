@@ -36,7 +36,7 @@
             editUser.setAttribute("class", "btn btn-warning");
             editUser.style.marginRight = "2.5%";
 
-            deleteForm.setAttribute("action", `/removeMedlem/${user.id}`);
+            deleteForm.setAttribute("action", `/removeMember/${user.id}`);
             deleteForm.setAttribute("method", "POST");
             deleteForm.style.padding = "0";
             deleteUser.innerText = "🗑️";
@@ -77,7 +77,7 @@
         </thead>
         <tbody id="kompaniBody"></tbody>
       </table>
-      <a href="/leder/add/" id="eBtn">+</a>
+      <a href="/u/leder/add/" id="eBtn">+</a>
     </aside>
   </body>
 </html>

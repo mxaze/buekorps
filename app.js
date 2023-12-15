@@ -38,7 +38,7 @@ const createParent = db.prepare(
 const createPeletong = db.prepare(`INSERT INTO peletong (name) VALUES (?);`);
 
 // updates the peletong_id of a user
-const updateMedlemPeletong = db.prepare(
+const updateMember = db.prepare(
   `UPDATE users SET peletong_id = ? WHERE id = ?`
 );
 // updates the forelder_id of a user
@@ -47,7 +47,7 @@ const updateForelderID = db.prepare(
 );
 
 // removes a user from a peletong by setting their peletong_id to 0
-const removeMedlem = db.prepare(
+const removeMember = db.prepare(
   `UPDATE users SET peletong_id = 0 WHERE id = ?`
 );
 
@@ -199,8 +199,8 @@ app.get("/json/peletong/", (req, res) => {
   res.json(peletong);
 });
 
-app.get("/json/peletongNULL/", (req, res) => {
-  const peletong = db.prepare("SELECT id, name, email, role FROM users WHERE peletong_id = ?").all(0);
+app.get("/json/peletongNULL", (req, res) => {
+  const peletong = db.prepare("SELECT id, name, email, role FROM users WHERE peletong_id = 0").all()
   res.json(peletong);
 });
 
@@ -213,6 +213,10 @@ app.get("/u/admin/edit/:id", (req, res) => {
 
 app.get("/u/admin/create", (req, res) => {
   res.sendFile(__dirname + "/public/user/admin/create.html");
+});
+
+app.get("/u/admin/peletong", (req, res) => {
+  res.sendFile(__dirname + "/public/user/admin/peletong.html");
 });
 
 app.get("/u/admin/", (req, res) => {
@@ -232,6 +236,11 @@ app.get("/u/leder/edit/:id", (req, res) => {
 });
 
 app.get("/u/leder/add", (req, res) => {
+  const user = findByToken.get(req.cookies.token);
+  res.redirect(`/u/leder/add/${user.peletong_id}`);
+});
+
+app.get("/u/leder/add/:id", (req, res) => {
   res.sendFile(__dirname + "/public/user/leder/add.html");
 });
 
@@ -341,7 +350,7 @@ app.post("/editUser", (req, res) => {
   }
 
   if (peletong_id != user.peletong_id) {
-    updateMedlemPeletong.run(peletong_id, id);
+    updateMember.run(peletong_id, id);
   }
 
   if (phone != user.phone) {
@@ -452,6 +461,30 @@ app.post("/editMember", (req, res) => {
   }
 
   res.redirect("/u/leder/");
+});
+
+app.post("/addMember/:id", (req, res) => {
+  const peletongID = req.params.id; // Get the peletong ID from the request params
+  const userID = req.body.userID; // Get the user ID from the request body
+
+  // Add the user to the peleton
+  updateMember.run(peletongID, userID);
+    
+  res.redirect("/u/leder/");
+});
+
+// removes a user from peleton based on their id
+app.post("/removeMember/:id", (req, res) => {
+  const user = findByToken.get(req.cookies.token);
+  const id = req.params.id;
+  removeMember.run(id);
+  res.redirect(`/u/leder/`);
+});
+
+app.post("/createPeletong", (req, res) => {
+  const { name } = req.body;
+  createPeletong.run(name);
+  res.redirect("/u/admin");
 });
 
 // login works

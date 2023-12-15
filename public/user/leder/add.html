@@ -4,18 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="../../images/people.svg" />
-    <link rel="stylesheet" href="../../style.css" />
+    <link rel="stylesheet" href="/style.css" />
     <title>Medlemmer i buekorps, velg de du vil ha</title>
     <script defer>
       // Extract the peletong ID from the window location pathname
-      const peletongID = window.location.pathname.split("/")[3];
+      const peletongID = window.location.pathname.split("/")[4];
 
       fetch("/json/peletongNULL")
         .then((res) => res.json())
         // Get the data from the API
         .then((data) => {
           // Sort the data by ID
-          const medlemmer = data.filter((user) => user.rolle === "medlem");
+          const medlemmer = data.filter((user) => user.role === "medlem");
           medlemmer.sort((a, b) => a.id - b.id);
           
           // Put the data in the table
@@ -31,15 +31,16 @@
             id.innerText = user.id;
             name.innerText = user.name;
             email.innerText = user.email;
-            rolle.innerText = user.rolle;
+            rolle.innerText = user.role;
             addButton.innerText = "ADD";
+            addButton.style.color= "white"
             addButton.setAttribute("class", "btn btn-danger");
             addButton.style.border = "none";
             addButton.style.fontSize = "30px";
             addButton.style.margin = "0";
             addButton.addEventListener("click", () => {
               // Send a POST request to add the user to the peletong when the button is clicked
-              fetch(`/addMedlem/${peletongID}`, {
+              fetch(`/addMember/${peletongID}`, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -47,7 +48,7 @@
                 body: JSON.stringify({ userID: user.id }), // Use the user's ID
               });
 
-              window.location.pathname="/leder/";
+              window.location.pathname="/u/leder/";
             });
             tr.appendChild(id);
             tr.appendChild(name);
@@ -79,6 +80,5 @@
       </thead>
       <tbody id="kompaniBody"></tbody>
     </table>
-    <a href="/leder/" id="eBtn"> Gå tilbake </a>
   </body>
 </html>
