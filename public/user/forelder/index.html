@@ -1,12 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../style.css">
-    <title>Forelder</title>
-</head>
-<body>
-    
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+    <title>Mine barn</title>
+    <script defer>
+      // gets info from api and puts it in the table
+      fetch(`/json/barn/`)
+        .then((res) => res.json())
+        .then((data) => {
+          const barn = data.filter((user) => user.role === "medlem");
+
+          barn.sort((a, b) => a.id - b.id);
+
+          barn.forEach((user) => {
+            const tr = document.createElement("tr");
+            const name = document.createElement("td");
+            const email = document.createElement("td");
+            const rolle = document.createElement("td");
+            name.innerText = user.name;
+            email.innerText = user.email;
+            rolle.innerText = user.role;
+            tr.appendChild(name);
+            tr.appendChild(email);
+            tr.appendChild(rolle);
+            document.getElementById("kompaniBody").appendChild(tr);
+          });
+        })
+        .catch((error) => console.error("Error:", error));
+    </script>
+  </head>
+  <body id="editBody">
+    <br />
+    <h1>Mine barn</h1>
+    <table>
+      <thead id="thead">
+        <tr>
+          <th>Navn</th>
+          <th>Epost</th>
+          <th>Rolle</th>
+        </tr>
+      </thead>
+      <tbody id="kompaniBody"></tbody>
+    </table>
+  </body>
 </html>

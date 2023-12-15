@@ -30,22 +30,29 @@ const deleteStmt = db.prepare("DELETE FROM users WHERE id = ?");
 const findByToken = db.prepare("SELECT * FROM users WHERE token = ?");
 
 // creates a parent in the database with the given values
-const createParent = db.prepare( `INSERT INTO forelder (name, email, password, token) VALUES (?, ?, ?, ?);`)
+const createParent = db.prepare(
+  `INSERT INTO forelder (name, email, password, token) VALUES (?, ?, ?, ?);`
+);
 
 // creates a peletong in the database with the given values
-const createPeletong = db.prepare(`INSERT INTO peletong (name) VALUES (?);`)
+const createPeletong = db.prepare(`INSERT INTO peletong (name) VALUES (?);`);
 
 // updates the peletong_id of a user
-const updateMedlemPeletong = db.prepare(`UPDATE users SET peletong_id = ? WHERE id = ?`)
+const updateMedlemPeletong = db.prepare(
+  `UPDATE users SET peletong_id = ? WHERE id = ?`
+);
 // updates the forelder_id of a user
-const updateForelderID = db.prepare(`UPDATE users SET forelder_id = ? WHERE id = ?`)
+const updateForelderID = db.prepare(
+  `UPDATE users SET forelder_id = ? WHERE id = ?`
+);
 
 // removes a user from a peletong by setting their peletong_id to 0
-const removeMedlem = db.prepare(`UPDATE users SET peletong_id = 0 WHERE id = ?`)
+const removeMedlem = db.prepare(
+  `UPDATE users SET peletong_id = 0 WHERE id = ?`
+);
 
 // deletes a user from the database
-const deleteUser = db.prepare("DELETE FROM users WHERE id = ?")
-
+const deleteUser = db.prepare("DELETE FROM users WHERE id = ?");
 
 const hashPassword = (password) => {
   const saltRounds = 6;
@@ -54,7 +61,6 @@ const hashPassword = (password) => {
 
 // Function for creating test data
 function createTestData() {
-  ("");
   insertUser.run(
     "admin", // name
     "admin@test.com", //email
@@ -64,7 +70,7 @@ function createTestData() {
     "", // adress
     "", // birthdate
     "1", // peletong_id
-    "3", // forelder_id
+    "4", // forelder_id
     crypto.randomUUID() // token
   );
   insertUser.run(
@@ -80,14 +86,14 @@ function createTestData() {
     crypto.randomUUID() // token
   );
   insertUser.run(
-    "fenrik", // name
-    "fenrik@test.com", // email
+    "leder2", // name
+    "leder2@test.com", // email
     "leder", // role
     hashPassword("Passord01"), // password
     "", // phone
     "", // adress
     "", // birthdate
-    "2", // peletong_id
+    "1", // peletong_id
     "0", // forelder_id
     crypto.randomUUID() // token
   );
@@ -100,7 +106,7 @@ function createTestData() {
     "", // adress
     "", // birthdate
     "1", // peletong_id
-    "3", // forelder_id
+    "4", // forelder_id
     crypto.randomUUID() // token
   );
   createParent.run(
@@ -117,25 +123,25 @@ function createTestData() {
     "", // phone
     "", // adress
     "", // birthdate
-    "2", // peletong_id
+    "1", // peletong_id
     "0", // forelder_id
     crypto.randomUUID() // token
   );
   insertUser.run(
-    "ulrik", // name
-    "ulrik@test.com", // email
+    "medlem2", // name
+    "medlem2@test.com", // email
     "medlem", // role
     hashPassword("Passord01"), // password
     "", // phone
     "", // adress
     "", // birthdate
     "1", // peletong_id
-    "3", // forelder_id
+    "4", // forelder_id
     crypto.randomUUID() // token
   );
   insertUser.run(
-    "sigurd", // name
-    "sigurd@test.com", // email
+    "medlem3", // name
+    "medlem3@test.com", // email
     "medlem", // role
     hashPassword("Passord01"), // password
     "", // phone
@@ -146,8 +152,8 @@ function createTestData() {
     crypto.randomUUID() // token
   );
   insertUser.run(
-    "emil", // name
-    "emil@test.com", // email
+    "medlem4", // name
+    "medlem4@test.com", // email
     "medlem", // role
     hashPassword("Passord01"), // password
     "", // phone
@@ -158,25 +164,44 @@ function createTestData() {
     crypto.randomUUID() // token
   );
   insertUser.run(
-    "henrik", // name
-    "henrik@test.com", // email
+    "medlem5", // name
+    "medlem5@test.com", // email
     "medlem", // role
     hashPassword("Passord01"), // password
     "", // phone
     "", // adress
     "", // birthdate
     "1", // peletong_id
-    "3", // forelder_id
+    "4", // forelder_id
     crypto.randomUUID() // token
   );
 
   // creates peletong
   createPeletong.run("Peletong 1");
-  createPeletong.run("Fenrik skvadron");
+  createPeletong.run("Leder 2 peletongo");
 }
+
 app.get("/json/users", (req, res) => {
   const users = db.prepare("SELECT * FROM users").all();
   res.send(users);
+});
+
+app.get("/json/barn/", (req, res) => {
+  const user = findByToken.get(req.cookies.token);
+  const barn = db.prepare("SELECT name, email, role FROM users WHERE forelder_id = ?").all(user.forelder_id);
+  res.json(barn);
+});
+
+
+app.get("/json/peletong/", (req, res) => {
+  const user = findByToken.get(req.cookies.token);
+  const peletong = db.prepare("SELECT id, name, email, role FROM users WHERE peletong_id = ?").all(user.peletong_id);
+  res.json(peletong);
+});
+
+app.get("/json/peletongNULL/", (req, res) => {
+  const peletong = db.prepare("SELECT id, name, email, role FROM users WHERE peletong_id = ?").all(0);
+  res.json(peletong);
 });
 
 app.get("/u/admin/edit", (req, res) => {
@@ -194,8 +219,20 @@ app.get("/u/admin/", (req, res) => {
   res.sendFile(__dirname + "/public/user/admin/index.html");
 });
 
+app.get("/u/forelder/", (req, res) => {
+  res.sendFile(__dirname + "/public/user/forelder/index.html");
+})
+
 app.get("/u/leder/", (req, res) => {
   res.sendFile(__dirname + "/public/user/leder/index.html");
+});
+
+app.get("/u/leder/edit/:id", (req, res) => {
+  res.sendFile(__dirname + "/public/user/leder/edit.html");
+});
+
+app.get("/u/leder/add", (req, res) => {
+  res.sendFile(__dirname + "/public/user/leder/add.html");
 });
 
 app.get("/u/medlem/", (req, res) => {
@@ -208,6 +245,11 @@ app.get("/u/medlem/kontaktinfo", (req, res) => {
 
 app.get("/u/medlem/peletong", (req, res) => {
   res.sendFile(__dirname + "/public/user/medlem/peletong.html");
+});
+
+app.get("/api/user/token", (req, res) => {
+  const user = findByToken.get(req.cookies.token);
+  res.send(user);
 });
 
 app.post("/post/slettBruker/:id", (req, res) => {
@@ -323,40 +365,122 @@ app.post("/editUser", (req, res) => {
     updateForelderID.run(forelder_id, id);
   }
 
-
   res.redirect("/u/admin/edit");
+});
+
+app.post("/editKontakt", (req, res) => {
+  const {
+    id,
+    name,
+    email,
+    phone,
+    adress,
+    birthdate,
+  } = req.body;
+
+  const user = db.prepare("SELECT * FROM users WHERE id = ?").get(id);
+
+  // checks if the user has changed their name, email, role, peletong_id, phone, adress, birthdate or forelder_id
+  if (name != user.name) {
+    const updateStmt = db.prepare("UPDATE users SET name = ? WHERE id = ?");
+    updateStmt.run(name, id);
+  }
+
+  if (email != user.email) {
+    const updateStmt = db.prepare("UPDATE users SET email = ? WHERE id = ?");
+    updateStmt.run(email, id);
+  }
+
+  if (phone != user.phone) {
+    const updateStmt = db.prepare("UPDATE users SET phone = ? WHERE id = ?");
+    updateStmt.run(phone, id);
+  }
+
+  if (birthdate != user.birthdate) {
+    const updateStmt = db.prepare(
+      "UPDATE users SET birthdate = ? WHERE id = ?"
+    );
+    updateStmt.run(birthdate, id);
+  }
+
+  if (adress != user.adress) {
+    const updateStmt = db.prepare("UPDATE users SET adress = ? WHERE id = ?");
+    updateStmt.run(adress, id);
+  }
+
+  res.redirect("/u/medlem/");
+});
+
+app.post("/editMember", (req, res) => {
+  const {
+    id,
+    name,
+    email,
+    phone,
+    adress,
+    birthdate,
+  } = req.body;
+
+  const user = db.prepare("SELECT * FROM users WHERE id = ?").get(id);
+
+  // checks if the user has changed their name, email, role, peletong_id, phone, adress, birthdate or forelder_id
+  if (name != user.name) {
+    const updateStmt = db.prepare("UPDATE users SET name = ? WHERE id = ?");
+    updateStmt.run(name, id);
+  }
+
+  if (email != user.email) {
+    const updateStmt = db.prepare("UPDATE users SET email = ? WHERE id = ?");
+    updateStmt.run(email, id);
+  }
+
+  if (phone != user.phone) {
+    const updateStmt = db.prepare("UPDATE users SET phone = ? WHERE id = ?");
+    updateStmt.run(phone, id);
+  }
+
+  if (birthdate != user.birthdate) {
+    const updateStmt = db.prepare(
+      "UPDATE users SET birthdate = ? WHERE id = ?"
+    );
+    updateStmt.run(birthdate, id);
+  }
+
+  if (adress != user.adress) {
+    const updateStmt = db.prepare("UPDATE users SET adress = ? WHERE id = ?");
+    updateStmt.run(adress, id);
+  }
+
+  res.redirect("/u/leder/");
 });
 
 // login works
 app.post("/login", (req, res) => {
-    const { email, password } = req.body; // gets the email and password from the request body
-    const user = db
-      .prepare("SELECT * FROM users WHERE email = ?")
-      .get(email)
-  
-    // if the user does not exist, send a 401 status code
-    if (!user) {
-      res.status(401).send("Invalid email or password");
-      return;
-    }
-  
-    // compares the password from the request body with the password in the database
-    const compare = bcrypt.compareSync(password, user.password);
-  
-    if (compare) {
-      res.cookie("token", user.token, {
-        maxAge: 1000 * 60 * 60 * 24 * 7,
-        httpOnly: true,
-      });
-      // redirects the user to the correct page based on their role
-      res.redirect(`/u/${user.role}`)
-    } else {
-      res.status(401).send("Invalid email or password");
-    }
-});
-  
-app.use("/", express.static(path.join(__dirname, "public")));
+  const { email, password } = req.body; // gets the email and password from the request body
+  const user = db.prepare("SELECT * FROM users WHERE email = ?").get(email);
 
+  // if the user does not exist, send a 401 status code
+  if (!user) {
+    res.status(401).send("Invalid email or password");
+    return;
+  }
+
+  // compares the password from the request body with the password in the database
+  const compare = bcrypt.compareSync(password, user.password);
+
+  if (compare) {
+    res.cookie("token", user.token, {
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      httpOnly: true,
+    });
+    // redirects the user to the correct page based on their role
+    res.redirect(`/u/${user.role}`);
+  } else {
+    res.status(401).send("Invalid email or password");
+  }
+});
+
+app.use("/", express.static(path.join(__dirname, "public")));
 
 app.listen(3000, () => {
   console.log(`Click link http://localhost:3000`);

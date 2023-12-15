@@ -1,11 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="../../images/people.svg" />
+    <link rel="stylesheet" href="../../style.css" />
+    <title>Medlemmer i buekorps, velg de du vil ha</title>
+    <script defer>
+      // Extract the peletong ID from the window location pathname
+      const peletongID = window.location.pathname.split("/")[3];
+
+      fetch("/json/peletongNULL")
+        .then((res) => res.json())
+        // Get the data from the API
+        .then((data) => {
+          // Sort the data by ID
+          const medlemmer = data.filter((user) => user.rolle === "medlem");
+          medlemmer.sort((a, b) => a.id - b.id);
+          
+          // Put the data in the table
+          medlemmer.forEach((user) => {
+            const tr = document.createElement("tr");
+            const id = document.createElement("td");
+            const name = document.createElement("td");
+            const email = document.createElement("td");
+            const rolle = document.createElement("td");
+            const actions = document.createElement("td");
+            const addButton = document.createElement("button");
+            id.setAttribute("class", "id");
+            id.innerText = user.id;
+            name.innerText = user.name;
+            email.innerText = user.email;
+            rolle.innerText = user.rolle;
+            addButton.innerText = "ADD";
+            addButton.setAttribute("class", "btn btn-danger");
+            addButton.style.border = "none";
+            addButton.style.fontSize = "30px";
+            addButton.style.margin = "0";
+            addButton.addEventListener("click", () => {
+              // Send a POST request to add the user to the peletong when the button is clicked
+              fetch(`/addMedlem/${peletongID}`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ userID: user.id }), // Use the user's ID
+              });
+
+              window.location.pathname="/leder/";
+            });
+            tr.appendChild(id);
+            tr.appendChild(name);
+            tr.appendChild(email);
+            tr.appendChild(rolle);
+            actions.appendChild(addButton);
+            tr.appendChild(actions);
+            document.getElementById("kompaniBody").appendChild(tr);
+          });
+        });
+    </script>
+    <style>
+      form {
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body id="editBody">
+    <h3>Medlemmer i buekorps, velg de du vil ha</h3>
+    <table>
+      <thead id="thead">
+        <tr>
+          <th>#</th>
+          <th>Navn</th>
+          <th>E-post</th>
+          <th>Rolle</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="kompaniBody"></tbody>
+    </table>
+    <a href="/leder/" id="eBtn"> Gå tilbake </a>
+  </body>
 </html>

@@ -1,14 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/style.css">
-    <title>Kontaktinfo</title>
-</head>
-<body>
-    <main>
-        <h1>Test</h1>
-    </main>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+    <title>Rediger kontaktinfo</title>
+  </head>
+  <body>
+    <aside>
+      <h1>Min kontaktinfo</h1>
+      <form action="/editKontakt" method="POST">
+        <input type="hidden" name="id" id="id" />
+        <input type="hidden" name="role" id="role" />
+        <label>Fult navn</label>
+        <input type="text" name="name" id="name" placeholder="Fullt navn" />
+        <label>Email</label>
+        <input type="email" name="email" id="email" placeholder="Email" />
+        <label>Telefon</label>
+        <input type="tel" name="phone" id="phone" placeholder="Telefon" />
+        <label>Fødselsdato</label>
+        <input
+          type="date"
+          name="birthdate"
+          id="birthdate"
+          placeholder="Fødselsdato"
+        />
+        <label>Adresse</label>
+        <input type="text" name="adress" id="adress" placeholder="Adresse" />
+        <input type="submit" />
+      </form>
+    </aside>
+    <script defer>
+      // gets id from html and puts it in the form
+      const form = {
+        id: document.getElementById("id"),
+        role: document.getElementById("role"),
+        name: document.getElementById("name"),
+        email: document.getElementById("email"),
+        phone: document.getElementById("phone"),
+        adress: document.getElementById("adress"),
+        birthdate: document.getElementById("birthdate"),
+      };
+      
+      // gets info from api and puts it in the form
+      async function getInfo() {
+        const res = await fetch("/api/user/token");
+        const data = await res.json();
+        form.id.value = data.id;
+        form.role.value = data.role;
+        form.name.value = data.name;
+        form.email.value = data.email;
+        form.phone.value = data.phone;
+        form.adress.value = data.adress;
+        form.birthdate.value = data.birthdate;
+      }
+      getInfo();
+    </script>
+  </body>
 </html>

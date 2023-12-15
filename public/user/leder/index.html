@@ -1,14 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../style.css">
-    <title>Lederpage</title>
-</head>
-<body>
-    <main>
-        <h1>Velkommen leder</h1>
-    </main>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="../../images/people.svg" />
+    <link rel="stylesheet" href="../../style.css" />
+    <title>Kompani</title>
+    <script>
+      fetch(`/json/peletong/`)
+        .then((res) => res.json())
+        .then((data) => {
+          const medlemmer = data.filter((user) => user.role === "medlem");
+          medlemmer.sort((a, b) => a.id - b.id);
+
+          medlemmer.forEach((user) => {
+            const tr = document.createElement("tr");
+            const id = document.createElement("td");
+            const name = document.createElement("td");
+            const email = document.createElement("td");
+            const rolle = document.createElement("td");
+            const actions = document.createElement("td");
+            const editUserA = document.createElement("a");
+            const editUser = document.createElement("button");
+            const deleteForm = document.createElement("form");
+            const deleteUser = document.createElement("button");
+
+            id.setAttribute("class", "id");
+            id.innerText = user.id;
+            name.innerText = user.name;
+            email.innerText = user.email;
+            rolle.innerText = user.role;
+
+            editUserA.href = `/u/leder/edit/${user.id}`;
+            editUser.innerText = "✏️";
+            editUser.setAttribute("class", "btn btn-warning");
+            editUser.style.marginRight = "2.5%";
+
+            deleteForm.setAttribute("action", `/removeMedlem/${user.id}`);
+            deleteForm.setAttribute("method", "POST");
+            deleteForm.style.padding = "0";
+            deleteUser.innerText = "🗑️";
+            deleteUser.setAttribute("class", "btn btn-danger");
+
+            tr.appendChild(id);
+            tr.appendChild(name);
+            tr.appendChild(email);
+            tr.appendChild(rolle);
+            editUserA.appendChild(editUser);
+            actions.appendChild(editUserA);
+            deleteForm.appendChild(deleteUser);
+            actions.appendChild(deleteForm);
+            tr.appendChild(actions);
+
+            document.getElementById("kompaniBody").appendChild(tr);
+          });
+        });
+    </script>
+    <style>
+      form {
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <aside>
+      <h1>Ditt kompani</h1>
+      <table>
+        <thead id="thead">
+          <tr>
+            <th>#</th>
+            <th>Navn</th>
+            <th>E-post</th>
+            <th>Rolle</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="kompaniBody"></tbody>
+      </table>
+      <a href="/leder/add/" id="eBtn">+</a>
+    </aside>
+  </body>
 </html>
