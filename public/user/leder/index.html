@@ -12,12 +12,13 @@
         .then((data) => {
           const medlemmer = data.filter((user) => user.role === "medlem");
           medlemmer.sort((a, b) => a.id - b.id);
+          console.log(medlemmer);
 
           medlemmer.forEach((user) => {
             const tr = document.createElement("tr");
-            const id = document.createElement("td");
             const name = document.createElement("td");
             const email = document.createElement("td");
+            const telefon = document.createElement("td");
             const rolle = document.createElement("td");
             const actions = document.createElement("td");
             const editUserA = document.createElement("a");
@@ -25,10 +26,9 @@
             const deleteForm = document.createElement("form");
             const deleteUser = document.createElement("button");
 
-            id.setAttribute("class", "id");
-            id.innerText = user.id;
             name.innerText = user.name;
             email.innerText = user.email;
+            telefon.innerText = user.phone;
             rolle.innerText = user.role;
 
             editUserA.href = `/u/leder/edit/${user.id}`;
@@ -42,9 +42,9 @@
             deleteUser.innerText = "🗑️";
             deleteUser.setAttribute("class", "btn btn-danger");
 
-            tr.appendChild(id);
             tr.appendChild(name);
             tr.appendChild(email);
+            tr.appendChild(telefon);
             tr.appendChild(rolle);
             editUserA.appendChild(editUser);
             actions.appendChild(editUserA);
@@ -57,8 +57,32 @@
         });
     </script>
     <style>
+
+      body {
+        min-height: 0;
+        height: 100%;
+        align-items: flex-start;
+      }
       form {
         display: inline-block;
+      }
+
+      table {
+        height: 100%;
+      }
+
+      #eBtn {
+        display: block;
+        transition: 0.2s ease-in-out;
+        margin: 0 auto;
+        text-align: center;
+        color: #fff;
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      #eBtn:hover {
+        transform: scale(1.2);
       }
     </style>
   </head>
@@ -68,16 +92,16 @@
       <table>
         <thead id="thead">
           <tr>
-            <th>#</th>
             <th>Navn</th>
             <th>E-post</th>
+            <th>Telefon</th>
             <th>Rolle</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody id="kompaniBody"></tbody>
       </table>
-      <a href="/u/leder/add/" id="eBtn">+</a>
+      <a href="/u/leder/add/" id="eBtn">LEGG TIL MEDLEM</a>
     </aside>
   </body>
 </html>

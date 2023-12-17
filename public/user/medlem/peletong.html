@@ -17,16 +17,12 @@
 
           medlemmer.forEach((user) => {
             const tr = document.createElement("tr");
-            const id = document.createElement("td");
             const name = document.createElement("td");
             const email = document.createElement("td");
             const rolle = document.createElement("td");
-            id.setAttribute("class", "id");
-            id.innerText = user.id;
             name.innerText = user.name;
             email.innerText = user.email;
             rolle.innerText = user.role;
-            tr.appendChild(id);
             tr.appendChild(name);
             tr.appendChild(email);
             tr.appendChild(rolle);
@@ -42,7 +38,6 @@
     <table>
       <thead id="thead">
         <tr>
-          <th>#</th>
           <th>Navn</th>
           <th>Epost</th>
           <th>Rolle</th>

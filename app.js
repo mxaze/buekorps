@@ -195,7 +195,7 @@ app.get("/json/barn/", (req, res) => {
 
 app.get("/json/peletong/", (req, res) => {
   const user = findByToken.get(req.cookies.token);
-  const peletong = db.prepare("SELECT id, name, email, role FROM users WHERE peletong_id = ?").all(user.peletong_id);
+  const peletong = db.prepare("SELECT id, name, email, phone, role FROM users WHERE peletong_id = ?").all(user.peletong_id);
   res.json(peletong);
 });
 

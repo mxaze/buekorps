@@ -17,12 +17,11 @@
           barn.forEach((user) => {
             const tr = document.createElement("tr");
             const name = document.createElement("td");
-            const email = document.createElement("td");
-            const rolle = document.createElement("td");
+            const role = document.createElement("td");
             name.innerText = user.name;
-            email.innerText = user.email;
+            role.innerText = user.role;
             tr.appendChild(name);
-            tr.appendChild(email);
+            tr.appendChild(role);
             document.getElementById("kompaniBody").appendChild(tr);
           });
         })
@@ -35,12 +34,6 @@
         width: 100%;
         border-collapse: collapse;
       }
-
-      th,
-      td {
-        width: 50%;
-        text-align: left;
-      }
     </style>
     <br />
     <h1>Mine barn</h1>
@@ -48,7 +41,7 @@
       <thead id="thead">
         <tr>
           <th>Navn</th>
-          <th>Epost</th>
+          <th>Rolle</th>
         </tr>
       </thead>
       <tbody id="kompaniBody"></tbody>
