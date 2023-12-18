@@ -5,12 +5,13 @@ const session = require("express-session");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const crypto = require("crypto");
-const { create } = require("domain");
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser()); // always use cookieParser or bodyParser
+app.use(express.static(path.join(__dirname, "public")));
+
 
 app.use(
   session({
@@ -513,7 +514,6 @@ app.post("/login", (req, res) => {
   }
 });
 
-app.use("/", express.static(path.join(__dirname, "public")));
 
 app.listen(3000, () => {
   console.log(`Click link http://localhost:3000`);
