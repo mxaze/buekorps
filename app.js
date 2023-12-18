@@ -10,7 +10,8 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser()); // always use cookieParser or bodyParser
-app.use(express.static(path.join(__dirname, "public")));
+app.use("/", express.static(path.join(__dirname, "public")));
+app.use('*/css',express.static('public/css'));
 
 
 app.use(
